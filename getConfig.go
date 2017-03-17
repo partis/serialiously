@@ -7,8 +7,9 @@ import (
 )
 
 type Config struct {
-  CommandFile string `json:"commandFile"`
-  ComPort string `json:"comPort"`
+	CommandFile string `json:"commandFile"`
+	ComPort string `json:"comPort"`
+	Prompt string `json:"prompt"`
 }
 
 func ReadConfig(configfile string) Config {

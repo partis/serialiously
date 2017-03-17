@@ -5,6 +5,7 @@ import (
 	"os"
 	"flag"
 	"bufio"
+	"strings"
 	"github.com/golang/glog"
 	"github.com/tarm/serial"
 )
@@ -19,7 +20,7 @@ func usage() {
 func init() {
   //set the usage to the above func
   flag.Usage = usage
-  //parse the flags from the command line to configre logging
+  //parse the flags from the command line to configure logging
   flag.Parse()
 }
 
@@ -35,23 +36,46 @@ func main() {
 
 	glog.Flush()
 
+	//var prompt byte
+
+	//decodedPrompt, err := hex.DecodeString(config.Prompt)
+
+	//prompt = decodedPrompt[0]
+
 	c := &serial.Config{Name: config.ComPort, Baud: 115200}
         s, err := serial.OpenPort(c)
         if err != nil {
                 glog.Fatal(err)
         }
 
-	buf := make([]byte, 128)
-        n, err := s.Read(buf)
+	n, err := s.Write([]byte("\n"))
+        if err != nil {
+        	glog.Fatal(err)
+        }
+
+	//reader := bufio.NewReader(s)
+        //read, err := reader.ReadBytes('>')
+        buf := make([]byte, 128)
+	n, err = s.Read(buf)
         if err != nil {
 	        glog.Fatal(err)
         }
 	glog.Info("Read this from the port:")
         glog.Info(string(buf[:n]))
 
+	for !strings.Contains(string(buf[:n]), ">") {
+		n, err = s.Read(buf)
+        	if err != nil {
+                	glog.Fatal(err)
+        	}
+        	glog.Info(string(buf[:n]))
+		glog.Flush()
+	}
+
 	for _,command := range commands {
 		glog.Info("Running command: " + string(command))
-	        n, err = s.Write([]byte(string(command)))
+		n, err := s.Write([]byte(fmt.Sprintf("%c", 8)))
+	        n, err = s.Write([]byte(string(command) + "\n"))
         	if err != nil {
                 	glog.Fatal(err)
         	}
@@ -63,6 +87,15 @@ func main() {
        		}
 		glog.Info("Read this from the port:")
         	glog.Info(string(buf[:n]))
+
+		for !strings.Contains(string(buf[:n]), ">") {
+                n, err = s.Read(buf)
+                if err != nil {
+                        glog.Fatal(err)
+                }
+                glog.Info(string(buf[:n]))
+                glog.Flush()
+        }
 
 		glog.Flush()
 	}
@@ -86,3 +119,9 @@ func ReadCommands(filename string) (commands []string) {
     	}
 	return
 }
+
+/**func DecodePrompt(prompt string) byte {
+	//check if its a unicode symbol
+	if strings.HasPrefix(prompt, "\u00") {
+		if prompt == "\\u003e"
+**/
