@@ -72,9 +72,19 @@ func main() {
 		glog.Flush()
 	}
 
+	//check how many characters after the prompt and backspace that many times
+	charsToDelete := strings.Split(string(buf[:n]), ">")
+
+	for _ = range charsToDelete[1] {
+		_, err := s.Write([]byte(fmt.Sprintf("%c", 8)))
+		if err != nil {
+                        glog.Fatal(err)
+                }
+	}
+
 	for _,command := range commands {
 		glog.Info("Running command: " + string(command))
-		n, err := s.Write([]byte(fmt.Sprintf("%c", 8)))
+		//n, err := s.Write([]byte(fmt.Sprintf("%c", 8)))
 	        n, err = s.Write([]byte(string(command) + "\n"))
         	if err != nil {
                 	glog.Fatal(err)
@@ -89,13 +99,23 @@ func main() {
         	glog.Info(string(buf[:n]))
 
 		for !strings.Contains(string(buf[:n]), ">") {
-                n, err = s.Read(buf)
-                if err != nil {
-                        glog.Fatal(err)
-                }
-                glog.Info(string(buf[:n]))
-                glog.Flush()
-        }
+                	n, err = s.Read(buf)
+                	if err != nil {
+                        	glog.Fatal(err)
+                	}
+                	glog.Info(string(buf[:n]))
+                	glog.Flush()
+        	}
+		
+		//check how many characters after the prompt and backspace that many times
+        	charsToDelete := strings.Split(string(buf[:n]), ">")
+
+        	for _ = range charsToDelete[1] {
+                	_, err := s.Write([]byte(fmt.Sprintf("%c", 8)))
+			if err != nil {
+                       		glog.Fatal(err)
+                	}
+        	}
 
 		glog.Flush()
 	}
