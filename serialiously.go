@@ -63,7 +63,7 @@ func main() {
 	glog.Info("Read this from the port:")
         glog.Info(string(buf[:n]))
 
-	for !strings.Contains(string(buf[:n]), ">") {
+	for !strings.Contains(string(buf[:n]), config.Prompt) {
 		n, err = s.Read(buf)
         	if err != nil {
                 	glog.Fatal(err)
@@ -73,7 +73,7 @@ func main() {
 	}
 
 	//check how many characters after the prompt and backspace that many times
-	charsToDelete := strings.Split(string(buf[:n]), ">")
+	charsToDelete := strings.Split(string(buf[:n]), config.Prompt)
 
 	for _ = range charsToDelete[1] {
 		_, err := s.Write([]byte(fmt.Sprintf("%c", 8)))
@@ -98,7 +98,7 @@ func main() {
 		glog.Info("Read this from the port:")
         	glog.Info(string(buf[:n]))
 
-		for !strings.Contains(string(buf[:n]), ">") {
+		for !strings.Contains(string(buf[:n]), config.Prompt) {
                 	n, err = s.Read(buf)
                 	if err != nil {
                         	glog.Fatal(err)
@@ -108,7 +108,7 @@ func main() {
         	}
 		
 		//check how many characters after the prompt and backspace that many times
-        	charsToDelete := strings.Split(string(buf[:n]), ">")
+        	charsToDelete := strings.Split(string(buf[:n]), config.Prompt)
 
         	for _ = range charsToDelete[1] {
                 	_, err := s.Write([]byte(fmt.Sprintf("%c", 8)))
