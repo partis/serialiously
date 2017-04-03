@@ -6,6 +6,7 @@ import (
 	"flag"
 	"bufio"
 	"strings"
+	"time"
 	"github.com/golang/glog"
 	"github.com/tarm/serial"
 )
@@ -118,6 +119,7 @@ func main() {
         	}
 
 		glog.Flush()
+		time.Sleep(time.Duration(config.Delay) * time.Millisecond)
 	}
 }
 

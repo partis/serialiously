@@ -10,6 +10,7 @@ type Config struct {
 	CommandFile string `json:"commandFile"`
 	ComPort string `json:"comPort"`
 	Prompt string `json:"prompt"`
+	Delay int `json:"delay"`
 }
 
 func ReadConfig(configfile string) Config {
