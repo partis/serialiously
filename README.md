@@ -2,7 +2,7 @@
 
 Opens a connection to serial com port, sends commands to the port and reads in the response.
 
-##Download and compile serialiously
+## Download and compile serialiously
 
 To compile Serialiously you’ll need to have installed golang, you can download it from here https://golang.org/dl/ and a number of tutorials are available to help you to configure it. 
 
@@ -26,7 +26,7 @@ For example I run
 
 Which creates a binary file in the bin directory of my workspace.
 
-##Configuring Serialiously
+## Configuring Serialiously
 
 Firstly we need somewhere for the logs to go, so in the bin directory of your workspace create a log directory
 
@@ -62,7 +62,7 @@ And finally change the permissions of the binary so that it can be executed.
 
 `chmod u+x serialiously`
  
-##Running Serialiously
+## Running Serialiously
 
 Once Serialiously is compiled and configured to run it is simple
 
