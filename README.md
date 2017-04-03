@@ -47,7 +47,7 @@ Create a config file, the file is a JSON formatted file currently with 4 setting
   "commandFile": "commands.lst",
   "comPort": "/dev/ttyS1",
   "prompt": ">",
-  "delay": "2"
+  "delay": 2
 }`
 
 commandFile – specifies the commands file we created above
